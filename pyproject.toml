@@ -43,11 +43,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/eaaltobot/PGPy"
+Homepage = "https://github.com/eaaltonen/PGPy"
 Documentation = "https://pgpy.readthedocs.io/en/latest/"
-Repository = "https://github.com/eaaltobot/PGPy.git"
+Repository = "https://github.com/eaaltonen/PGPy.git"
 Issues = "https://github.com/eaaltonen/PGPy/issues"
-Changelog = "https://github.com/eaaltobot/PGPy/blob/master/docs/source/changelog.rst"
+Changelog = "https://github.com/eaaltonen/PGPy/blob/master/docs/source/changelog.rst"
 
 [build-system]
 requires = ["setuptools", "wheel"]
