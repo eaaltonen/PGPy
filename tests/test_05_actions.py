@@ -317,6 +317,29 @@ class TestPGPKey_Management(object):
             self.gpg_verify_key(key)
 
     @pytest.mark.order(after='test_add_subkey')
+    # same for all keytypes
+    def test_add_subkey_expiration(self):
+        if len(self.keys) == 0:
+            pytest.skip('No keys generated; must run test_gen_key first')
+
+        key = next(iter(self.keys.values()))
+        subkey = PGPKey.new(PubKeyAlgorithm.RSAEncryptOrSign, 2048)
+
+        expiration = datetime.now(timezone.utc) + timedelta(days=2)
+
+        key.add_subkey(subkey, usage={KeyFlags.EncryptCommunications}, key_expiration=expiration)
+
+        sig = next(subkey.self_signatures)
+
+        assert sig.key_expiration is not None
+        assert sig.key_expiration == expiration - key.created
+
+        if gpg:
+            # try to verify with GPG
+            self.gpg_verify_key(key)
+
+
+    @pytest.mark.order(after='test_add_subkey_arguments')
     @pytest.mark.parametrize('pkspec', pkeyspecs, ids=[str(a) for a, s in pkeyspecs])
     def test_add_altuid(self, pkspec):
         if pkspec not in self.keys:

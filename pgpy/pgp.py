@@ -1914,6 +1914,14 @@ class PGPKey(Armorable, ParentRef, PGPObject):
 
         return next(self.self_signatures).key_flags
 
+    def _add_key_expiration(self, sig, key_expires):
+        if key_expires is not None:
+            # key_expires should be a timedelta, so if it's a datetime, turn it into a timedelta
+            if isinstance(key_expires, datetime):
+                key_expires = key_expires - self.created
+
+            sig._signature.subpackets.addnew('KeyExpirationTime', hashed=True, expires=key_expires)
+
     def _sign(self, subject, sig, **prefs):
         """
         The actual signing magic happens here.
@@ -2155,12 +2163,7 @@ class PGPKey(Armorable, ParentRef, PGPObject):
             primary_uid = prefs.pop('primary', None)
             attested_certifications = prefs.pop('attested_certifications', [])
 
-            if key_expires is not None:
-                # key expires should be a timedelta, so if it's a datetime, turn it into a timedelta
-                if isinstance(key_expires, datetime):
-                    key_expires = key_expires - self.created
-
-                sig._signature.subpackets.addnew('KeyExpirationTime', hashed=True, expires=key_expires)
+            self._add_key_expiration(sig, key_expires)
 
             if cipher_prefs is not None:
                 sig._signature.subpackets.addnew('PreferredSymmetricAlgorithms', hashed=True, flags=cipher_prefs)
@@ -2355,6 +2358,9 @@ class PGPKey(Armorable, ParentRef, PGPObject):
                     raise PGPError('subkey marked for signing usage requires a cross-signature')
             else:
                 sig._signature.subpackets.addnew('EmbeddedSignature', hashed=False, _sig=crosssig._signature)
+
+        key_expires = prefs.pop('key_expiration', None)
+        self._add_key_expiration(sig, key_expires)
 
         return self._sign(key, sig, **prefs)
 
