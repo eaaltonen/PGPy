@@ -17,8 +17,10 @@ PGPym: Pretty Good Privacy for Python
     :target: https://pgpy.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-`PGPym` is a hopefully temporary fork of `PGPy` with additional maintenance fixes.
+`PGPym` is a fork of `PGPy` with additional maintenance fixes.
 `PGPy` is Python library for implementing Pretty Good Privacy into Python programs, conforming to the OpenPGP specification per RFC 4880.
+`PGPym` installs with the same import package name, and is backwards import compatible with the original package.
+
 
 Features
 --------
@@ -26,6 +28,14 @@ Features
 Currently, PGPy can load keys and signatures of all kinds in both ASCII armored and binary formats.
 
 It can create and verify RSA, DSA, and ECDSA signatures, at the moment. It can also encrypt and decrypt messages using RSA and ECDH.
+
+PGPym Specific Features
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The following changes are specific to `PGPym`:
+
+* patched to be compatible with Python 3.13.
+* support setting key expiration dates for PGP subkeys.
 
 Installation
 ------------
