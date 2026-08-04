@@ -4,6 +4,17 @@
 Changelog
 *********
 
+v0.6.2
+======
+
+Released: Aug 4, 2026
+
+.. note::
+
+Bugs Fixed
+----------
+* added missing support for setting ``expiration_date`` when adding a subkey to a primary key.
+
 v0.6.1
 ======
 
